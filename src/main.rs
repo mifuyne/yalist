@@ -3,11 +3,13 @@ use std::collections::HashMap;
 use fltk::{
     app,
     enums::Font,
+    group::Group,
     prelude::*,
     text::{StyleTableEntry, TextBuffer, TextDisplay},
     window::Window,
 };
 
+mod mainscreen;
 mod settings;
 
 struct ChecklistApp {
@@ -15,19 +17,24 @@ struct ChecklistApp {
     active_list: String,
 }
 
-struct ListItem {
+impl ChecklistApp {
+    fn new() -> Self {
+        Self {
+            lists: HashMap::<String, Vec<ListItem>>::new(),
+            active_list: "".to_string(),
+        }
+    }
+}
+
+pub struct ListItem {
     status: bool,
     label: String,
+    grp: Group,
 }
 
 fn main() {
-    let app = app::App::default().load_system_fonts();
-    let fonts = app::fonts();
-    println!("{:?}", fonts);
-    let mut win = Window::new(100, 100, 400, 300, "Hello from fltk-rs");
-    let settings = settings::Settings::new();
-
-    println!("{:?}", settings);
+    let app = app::App::default();
+    let mut ui = mainscreen::UserInterface::new("Checklist App");
 
     app.run().unwrap();
 }
